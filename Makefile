@@ -17,7 +17,6 @@ help:
 	@echo
 
 
-
 verify-%: marriage.pml
 	$(SPIN) -D$(subst verify-,,$@) -a $<
 	$(LD) -DNXT -o pan pan.c
