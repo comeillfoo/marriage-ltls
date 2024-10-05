@@ -1,13 +1,11 @@
 #define ASSERT_LTL(fun, condition) \
-bool fun##_p = false \
-int fun##_marriages = 0 \
+bool p = false \
+int marriages = 0 \
 active proctype fun##BrideProc() { \
-    fun(fun##_p, fun##_marriages) \
+    fun(p, marriages) \
 } \
 ltl fun##_cond { (condition) }
 
-#define ASSERT_LTL_TRUE(fun, condition) ASSERT_LTL(fun, (condition))
-#define ASSERT_LTL_FALSE(fun, condition) ASSERT_LTL(fun, (!(condition)))
 
 /* "Я никогда не выйду замуж" */
 inline NeverBride(p, marriages) {
@@ -79,60 +77,39 @@ inline RandomBride(p, marriages) {
 }
 
 #ifdef NEVER
+#define CONDITION ([] !(p))
+ASSERT_LTL(NeverBride, CONDITION)
 
-#define NEVER_LTL(p) ([] !(p))
-ASSERT_LTL_TRUE(NeverBride, NEVER_LTL(NeverBride_p))
 #elif defined(EXACTLY_ONCE)
-#define EXACTLY_ONCE_LTL(p) (<>(p && X ([] !p)))
-// ASSERT_LTL_FALSE(NeverBride, EXACTLY_ONCE_LTL(NeverBride_p))
-ASSERT_LTL_TRUE(ExactlyOnceBride, EXACTLY_ONCE_LTL(ExactlyOnceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanOnceBride, EXACTLY_ONCE_LTL(NoMoreThanOnceBride_p))
-// ASSERT_LTL_FALSE(AtLeastOnceBride, EXACTLY_ONCE_LTL(AtLeastOnceBride_p))
-// ASSERT_LTL_FALSE(ExactlyTwiceBride, EXACTLY_ONCE_LTL(ExactlyTwiceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanTwiceBride, EXACTLY_ONCE_LTL(NoMoreThanTwiceBride_p))
-// ASSERT_LTL_FALSE(AtLeastTwiceBride, EXACTLY_ONCE_LTL(AtLeastTwiceBride_p))
+// My variant:
+#define CONDITION (<>(p && X ([] !p)))
+// Book variant:
+// #define CONDITION ((<>p) && ([](p -> X ([] !p))))
+ASSERT_LTL(ExactlyOnceBride, CONDITION)
+
 #elif defined(NO_MORE_THAN_ONCE)
+// My variant:
+#define CONDITION (([] !p) || (<> (p && X ([] !p))))
+// Book variant:
+// #define CONDITION ([](p -> X ([] !p)))
+ASSERT_LTL(NoMoreThanOnceBride, CONDITION)
 
-#define NO_MORE_THAN_ONCE_LTL(p) (([] !p) || (<> (p && X ([] !p))))
-// ASSERT_LTL_FALSE(NeverBride, NO_MORE_THAN_ONCE_LTL(NeverBride_p))
-// ASSERT_LTL_FALSE(ExactlyOnceBride, NO_MORE_THAN_ONCE_LTL(ExactlyOnceBride_p))
-ASSERT_LTL_TRUE(NoMoreThanOnceBride, NO_MORE_THAN_ONCE_LTL(NoMoreThanOnceBride_p))
-// ASSERT_LTL_FALSE(AtLeastOnceBride, NO_MORE_THAN_ONCE_LTL(AtLeastOnceBride_p))
-// ASSERT_LTL_FALSE(ExactlyTwiceBride, NO_MORE_THAN_ONCE_LTL(ExactlyTwiceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanTwiceBride, NO_MORE_THAN_ONCE_LTL(NoMoreThanTwiceBride_p))
-// ASSERT_LTL_FALSE(AtLeastTwiceBride, NO_MORE_THAN_ONCE_LTL(AtLeastTwiceBride_p))
 #elif defined(AT_LEAST_ONCE)
+#define CONDITION (<> p)
+ASSERT_LTL(AtLeastOnceBride, CONDITION)
 
-#define AT_LEAST_ONCE_LTL(p) (<> p)
-// ASSERT_LTL_FALSE(NeverBride, AT_LEAST_ONCE_LTL(NeverBride_p))
-// ASSERT_LTL_FALSE(ExactlyOnceBride, AT_LEAST_ONCE_LTL(ExactlyOnceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanOnceBride, AT_LEAST_ONCE_LTL(NoMoreThanOnceBride_p))
-ASSERT_LTL_TRUE(AtLeastOnceBride, AT_LEAST_ONCE_LTL(AtLeastOnceBride_p))
-// ASSERT_LTL_FALSE(ExactlyTwiceBride, AT_LEAST_ONCE_LTL(ExactlyTwiceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanTwiceBride, AT_LEAST_ONCE_LTL(NoMoreThanTwiceBride_p))
-// ASSERT_LTL_FALSE(AtLeastTwiceBride, AT_LEAST_ONCE_LTL(AtLeastTwiceBride_p))
 #elif defined(EXACTLY_TWICE)
+#define CONDITION ([]((p U p) && (X[](!p))))
+ASSERT_LTL(ExactlyTwiceBride, CONDITION)
 
-#define EXACTLY_TWICE_LTL(p) ([] !p)
-// ASSERT_LTL_FALSE(NeverBride, EXACTLY_TWICE_LTL(NeverBride_p))
-// ASSERT_LTL_FALSE(ExactlyOnceBride, EXACTLY_TWICE_LTL(ExactlyOnceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanOnceBride, EXACTLY_TWICE_LTL(NoMoreThanOnceBride_p))
-// ASSERT_LTL_FALSE(AtLeastOnceBride, EXACTLY_TWICE_LTL(AtLeastOnceBride_p))
-ASSERT_LTL_TRUE(ExactlyTwiceBride, EXACTLY_TWICE_LTL(ExactlyTwiceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanTwiceBride, EXACTLY_TWICE_LTL(NoMoreThanTwiceBride_p))
-// ASSERT_LTL_FALSE(AtLeastTwiceBride, EXACTLY_TWICE_LTL(AtLeastTwiceBride_p))
 #elif defined(NO_MORE_THAN_TWICE)
-// TODO: ltl
-#elif defined(AT_LEAST_TWICE)
+#define CONDITION (p)
+ASSERT_LTL(NoMoreThanTwiceBride, CONDITION)
 
-#define AT_LEAST_TWICE_LTL(p) (! (([] !p) || (p -> ([] !p))))
-// ASSERT_LTL_FALSE(NeverBride, AT_LEAST_TWICE_LTL(NeverBride_p))
-// ASSERT_LTL_FALSE(ExactlyOnceBride, AT_LEAST_TWICE_LTL(ExactlyOnceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanOnceBride, AT_LEAST_TWICE_LTL(NoMoreThanOnceBride_p))
-// ASSERT_LTL_FALSE(AtLeastOnceBride, AT_LEAST_TWICE_LTL(AtLeastOnceBride_p))
-// ASSERT_LTL_FALSE(ExactlyTwiceBride, AT_LEAST_TWICE_LTL(ExactlyTwiceBride_p))
-// ASSERT_LTL_FALSE(NoMoreThanTwiceBride, AT_LEAST_TWICE_LTL(NoMoreThanTwiceBride_p))
-ASSERT_LTL_TRUE(AtLeastTwiceBride, AT_LEAST_TWICE_LTL(AtLeastTwiceBride_p))
+#elif defined(AT_LEAST_TWICE)
+#define CONDITION (p)
+ASSERT_LTL(AtLeastTwiceBride, CONDITION)
+
 #else
-#error "Unknown case"
+#error "Unknown verification target"
 #endif
