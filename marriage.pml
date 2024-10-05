@@ -68,15 +68,8 @@ inline AtLeastTwiceBride(p, marriages) {
     od
 }
 
-/* "Может быть выйду, может быть нет" */
-inline RandomBride(p, marriages) {
-    do
-    :: atomic { p = true; marriages++ }
-    :: p = false
-    od
-}
-
 #ifdef NEVER
+// My variant:
 #define CONDITION ([] !(p))
 ASSERT_LTL(NeverBride, CONDITION)
 
@@ -99,15 +92,20 @@ ASSERT_LTL(NoMoreThanOnceBride, CONDITION)
 ASSERT_LTL(AtLeastOnceBride, CONDITION)
 
 #elif defined(EXACTLY_TWICE)
-#define CONDITION ([]((p U p) && (X[](!p))))
+// My variant:
+#define CONDITION ((<> p) && X (<>(p && (X([] !p)))))
+// Spin-complaint variant:
+// #define CONDITION ((<> p) -> X (<>(p && (X([] !p)))))
 ASSERT_LTL(ExactlyTwiceBride, CONDITION)
 
 #elif defined(NO_MORE_THAN_TWICE)
-#define CONDITION (p)
+// My variant:
+#define CONDITION (([] !p) || (<> (p && X ([] !p))) || ((<> p) && X (<>(p && (X([] !p))))))
 ASSERT_LTL(NoMoreThanTwiceBride, CONDITION)
 
 #elif defined(AT_LEAST_TWICE)
-#define CONDITION (p)
+// My variant (negation of no more than once):
+#define CONDITION (!(([] !p) || (<> (p && X ([] !p)))))
 ASSERT_LTL(AtLeastTwiceBride, CONDITION)
 
 #else
