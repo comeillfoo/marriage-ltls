@@ -64,8 +64,11 @@ proctype forbidden_cases()
 
 init
 {
-	//run allowed_cases();
+#ifdef ENABLE_ALLOWED_CASES
+	run allowed_cases();
+#else
 	run forbidden_cases();
+#endif
 }
 
 #define SOLUTION1 (  )
