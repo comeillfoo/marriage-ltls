@@ -1,6 +1,7 @@
 *
 !.gitignore
 !README.md
-!marriage_ltls_tests
 !*.pml
 !Makefile
+!marriage_ltls_tests
+!lr2_templates
