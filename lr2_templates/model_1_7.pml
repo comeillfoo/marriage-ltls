@@ -55,7 +55,7 @@ init
 #endif
 }
 
-#define SOLUTION1 ( !<>p )
+#define SOLUTION1 ( !(<>p) )
 
 ltl  p1 {  ( SOLUTION1 ) }
 ltl np1 { !( SOLUTION1 ) }
