@@ -23,7 +23,7 @@ set -euo pipefail
 
 ACTUAL_ERRORS=$("${VERIFICATOR}" -a -N "${LTL}" | grep -Eo 'errors: [0-9]+' | cut -d' ' -f2)
 if [ "${ACTUAL_ERRORS}" -ne "${EXPECTED_ERRORS}" ]; then
-    echo -e "${RED}[FAIL]${NC}: testing ${LTL} - ${MSG}: expected ${EXPECTED_ERRORS}, found ${ACTUAL_ERRORS}"
+    echo -e "${RED}[FAIL ]${NC}: testing ${LTL} - ${MSG}: expected ${EXPECTED_ERRORS}, found ${ACTUAL_ERRORS}"
     exit 1
 fi
 
