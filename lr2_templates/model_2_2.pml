@@ -52,7 +52,7 @@ init
 #endif
 }
 
-#define SOLUTION1 ( ([]!a) U (<>(a && b)) )
+#define SOLUTION1 ( (<>a) && [](a -> b) )
 
 ltl  p1 {  ( SOLUTION1 ) }
 ltl np1 { !( SOLUTION1 ) }
