@@ -71,7 +71,9 @@ init
 #endif
 }
 
-#define SOLUTION1 (  )
+#define SUBSOLUTION_A ( <>(p && (X<>p)) )
+#define SUBSOLUTION_B ( [](p -> (X[](p -> (X[]!p)))) )
+#define SOLUTION1 ( SUBSOLUTION_A && SUBSOLUTION_B )
 
 ltl  p1 {  ( SOLUTION1 ) }
 ltl np1 { !( SOLUTION1 ) }

@@ -72,7 +72,15 @@ init
 #endif
 }
 
-#define SOLUTION1 (  )
+#define SOLUTION1 ( !(([]!p) || ((<>p) && ([](p -> (X[](!p))))) ) )
+#define SOLUTION2 ( !([](p -> (X[]!p)) ) )
+#define SOLUTION3 ( <>(p && (X<>p)) )
 
 ltl  p1 {  ( SOLUTION1 ) }
 ltl np1 { !( SOLUTION1 ) }
+
+ltl  p2 {  ( SOLUTION2 ) }
+ltl np2 { !( SOLUTION2 ) }
+
+ltl  p3 {  ( SOLUTION3 ) }
+ltl np3 { !( SOLUTION3 ) }

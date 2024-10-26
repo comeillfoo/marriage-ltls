@@ -66,10 +66,11 @@ init
 #endif
 }
 
-#define SOLUTION1 (  )
+#define SOLUTION1 ( [](p -> (X[](p -> (X[]!p)))) )
+// TODO: SOLUTION2
 
 ltl  p1 {  ( SOLUTION1 ) }
 ltl np1 { !( SOLUTION1 ) }
 
-ltl  p2 {  ( SOLUTION2 ) }
-ltl np2 { !( SOLUTION2 ) }
+// ltl  p2 {  ( SOLUTION2 ) }
+// ltl np2 { !( SOLUTION2 ) }
