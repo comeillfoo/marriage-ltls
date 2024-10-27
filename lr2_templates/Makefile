@@ -3,7 +3,7 @@ CC=gcc
 LD=gcc
 MAKE?=make
 
-MODELS=model_1_1 model_1_2 model_1_3 model_1_4 model_1_5 model_1_6 model_1_7
+MODELS=model_1_1 model_1_2 model_1_3 model_1_4 model_1_5 model_1_6 model_1_7 model_2_1 model_2_2 model_2_3
 
 _space=$(noop) $(noop)
 _comma=$(noop),$(noop)
